@@ -49,6 +49,5 @@ for SUBNET in $SUBNET; do
     for HOST in $HOST; do
         echo "[*] IP : ${PREFIX}.${SUBNET}.${HOST}"
         arping -c 3 -i "$INTERFACE" "${PREFIX}.${SUBNET}.${HOST}" 2> /dev/null
-
     done
 done
