@@ -27,7 +27,7 @@ fi
 ip='^((25[0-5]|(2[0-4]|1[0-9]|[1-9]|)[0-9])\.?\b){2,4}$'
 
 if ! [[ $IP_ADDR =~ $ip ]]; then
-    echo "Wrong format" >&2
+    echo "Wrong IP format" >&2
     exit 1
 fi
 
@@ -37,7 +37,7 @@ if [[ ! $inteface_array =~ $INTERFACE ]]; then
     exit 1
 fi
 
-PREFIX=$(cut -s -d. -f1,2 <<< "$IP")
+PREFIX=$(cut -s -d. -f1,2 <<< "$IP_ADDR")
 
 tmp="$(cut -s -d. -f3 <<< "$IP_ADDR")"
 SUBNET="${tmp:-${OCTET[@]}}"
@@ -45,9 +45,11 @@ SUBNET="${tmp:-${OCTET[@]}}"
 tmp="$(cut -s -d. -f4 <<< "$IP_ADDR")"
 HOST="${tmp:-${OCTET[@]}}"
 
-for SUBNET in $SUBNET; do
-    for HOST in $HOST; do
-        echo "[*] IP : ${PREFIX}.${SUBNET}.${HOST}"
-        arping -c 3 -i "$INTERFACE" "${PREFIX}.${SUBNET}.${HOST}" 2> /dev/null
-    done
+for SUBNET in $SUBNET
+do
+        for HOST in $HOST
+        do
+                echo "[*] IP : ${PREFIX}.${SUBNET}.${HOST}"
+                arping -c 3 -i "$INTERFACE" "${PREFIX}.${SUBNET}.${HOST}" 2> /dev/null
+        done
 done
